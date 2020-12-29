@@ -8,7 +8,8 @@ if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 }
 
 function gotDevices (deviceInfos) {
-    deviceInfos.forEach(function(deviceInfo) {
+    deviceInfos.forEach(function(deviceInfo, index) {
+        console.log('test', index);
         const {kind, label, deviceId, groupId} = deviceInfo
         console.log(kind, label, deviceId, groupId);
     })
