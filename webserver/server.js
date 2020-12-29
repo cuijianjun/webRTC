@@ -13,8 +13,8 @@ app.use(express.static('./public'));
 var http_server = http.createServer(app);
 http_server.listen(8032, '0.0.0.0');
 var options = {
-	key: fs.readFileSync('./cert/4990587_test.pplu.vip.key'),
-	cert: fs.readFileSync('./cert/4990587_test.pplu.vip.pem')
+	key: fs.readFileSync('../cert/4990587_test.pplu.vip.key'),
+	cert: fs.readFileSync('../cert/4990587_test.pplu.vip.pem')
 }
 // https server 
 var https_server = https.createServer(options, app);
