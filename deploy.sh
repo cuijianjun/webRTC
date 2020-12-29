@@ -8,8 +8,8 @@ git commit -m  $1
 
 git push origin master
 
-CurrentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# CurrentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo CurrentDir
+# echo CurrentDir
 
 
