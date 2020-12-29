@@ -1,4 +1,10 @@
 'use strict'
+
+var audioSource = document.querySelector("select#audioSource");
+var audioOutSource = document.querySelector("select#audioOutSource");
+var videoSource = document.querySelector("select#videoSource");
+
+
 if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
     console.log("enumerateDevices is not supported!");
 } else {
@@ -10,9 +16,17 @@ if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 function gotDevices (deviceInfos) {
     console.log("deviceInfos", deviceInfos);
     deviceInfos.forEach(function(deviceInfo, index) {
-        console.log('test', index);
         const {kind, label, deviceId, groupId} = deviceInfo
-        console.log(kind, label, deviceId, groupId);
+        var option = document.createElement('option');
+        option.text = label;
+        option.value = deviceId
+        if(kind === 'audioinput') {
+            audioSource.appendChild(option)
+        } else if (kind === 'audiooutput'){
+            audioOutSource.appendChild(option)
+        } else if (kind === 'videoinput') {
+            videoSource.appendChild(option)
+        }
     })
 }
 
