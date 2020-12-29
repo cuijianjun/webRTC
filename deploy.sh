@@ -8,8 +8,5 @@ git commit -m  $1
 
 git push origin master
 
-# CurrentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# echo CurrentDir
-
+ssh -p 22 root@124.70.208.100 "cd ~/webRTC/; git pull origin master"
 
