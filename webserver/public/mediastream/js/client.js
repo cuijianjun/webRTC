@@ -26,32 +26,17 @@ var buffer;
 var mediaRecorder;
 
 function start() {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    console.log("getUserMedia is not supported");
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+    console.log("getDisplayMedia is not supported");
     return;
   } else {
     var deviceId = videoSource.value;
     var constraints = {
-        video: {
-          deviceId: deviceId? deviceId : undefined,
-          width: {
-            min: 300,
-            max: 320,
-          },
-          height: {
-            min: 300,
-            max: 480,
-          },
-          frameRate: {
-            min: 15,
-            max: 30,
-          },
-          facingMode: "enviroment",
-        },
+      video: true,
       audio: true,
     };
     navigator.mediaDevices
-      .getUserMedia(constraints)
+      .getDisplayMedia(constraints)
       .then(gotMediaStream)
       .then(gotDevices)
       .catch(handleError);
@@ -83,54 +68,54 @@ btnRecord.onclick = () => {
 };
 
 btnPlay.onclick = () => {
-    var blob = new Blob(buffer, {type: 'video/webm'});
-    recvideo.src = URL.createObjectURL(blob);
-    recvideo.srcObject = null;
-    recvideo.controls = true;
-    recvideo.play();
-}
+  var blob = new Blob(buffer, { type: "video/webm" });
+  recvideo.src = URL.createObjectURL(blob);
+  recvideo.srcObject = null;
+  recvideo.controls = true;
+  recvideo.play();
+};
 
 btnDownload.onclick = () => {
-    var blob = new Blob(buffer, {
-        type: 'video/webm'
-    })
-    var url = window.URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.style.display = 'none'
-    a.download = 'aaa.webm';
-    a.click();
-}
+  var blob = new Blob(buffer, {
+    type: "video/webm",
+  });
+  var url = window.URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.style.display = "none";
+  a.download = "aaa.webm";
+  a.click();
+};
 
-function handleDataAvailabel (e) {
-    if (e && e.data && e.data.size > 0) {
-        buffer.push(e.data)
-    }
+function handleDataAvailabel(e) {
+  if (e && e.data && e.data.size > 0) {
+    buffer.push(e.data);
+  }
 }
 function startRecord() {
-    buffer = [];
-    var options = {
-        mineType: 'video/webm;codecs=vp8'
-    }
-    if (!MediaRecorder.isTypeSupported(options.mineType)) {
-        console.log(`${options.mineType} is not supported`);
-        return;
-    }
-    try{
-        mediaRecorder = new MediaRecorder(window.stream, options);
-    } catch(e) {
-        console.log("Failed to create MediaRecorder：", e);
-        return;
-    }
-    mediaRecorder.ondataavailable = handleDataAvailabel;
-    mediaRecorder.start(10);
+  buffer = [];
+  var options = {
+    mineType: "video/webm;codecs=vp8",
+  };
+  if (!MediaRecorder.isTypeSupported(options.mineType)) {
+    console.log(`${options.mineType} is not supported`);
+    return;
+  }
+  try {
+    mediaRecorder = new MediaRecorder(window.stream, options);
+  } catch (e) {
+    console.log("Failed to create MediaRecorder：", e);
+    return;
+  }
+  mediaRecorder.ondataavailable = handleDataAvailabel;
+  mediaRecorder.start(10);
 }
 
 function stopRecord() {
-    mediaRecorder.stop();
+  mediaRecorder.stop();
 }
 function gotMediaStream(stream) {
-    window.stream = stream
+  window.stream = stream;
   console.log("stream", stream);
   videoplay.srcObject = stream;
   var videoTrack = stream.getVideoTracks()[0];
@@ -156,5 +141,5 @@ function gotDevices(deviceInfos) {
   });
 }
 function handleError(err) {
-  console.log("getUserMedia error:", err);
+  console.log("getDisplayMedia error:", err);
 }
