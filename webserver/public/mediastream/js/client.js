@@ -4,8 +4,8 @@ var audioSource = document.querySelector("select#audioSource");
 var audioOutput = document.querySelector("select#audioOutput");
 var videoSource = document.querySelector("select#videoSource");
 
-// var videoplay = document.querySelector("video#player");
-var audioplay = document.querySelector("audio#audioplayer");
+var videoplay = document.querySelector("video#player");
+// var audioplay = document.querySelector("audio#audioplayer");
 
 var filtersSelect = document.querySelector("select#filter");
 // picture
@@ -13,6 +13,8 @@ var snapshot = document.querySelector("button#snapshot");
 var picture = document.querySelector("canvas#picture");
 picture.width = 320;
 picture.height = 240;
+
+var divConstraints = document.querySelector('div#constraints');
 function start() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     console.log("getUserMedia is not supported");
@@ -36,7 +38,7 @@ function start() {
       //     },
       //     facingMode: "enviroment",
       //   },
-      video: false,
+      video: true,
       audio: true,
     };
     navigator.mediaDevices
@@ -61,8 +63,11 @@ snapshot.onclick = function () {
 
 function gotMediaStream(stream) {
   console.log("stream", stream);
-  //   videoplay.srcObject = stream;
-  audioplay.srcObject = stream;
+    videoplay.srcObject = stream;
+    var videoTrack = stream.getVideoTracks()[0];
+    var videoConstraints = videoTrack.getSettings();
+    divConstraints.textContent = JSON.stringify(videoConstraints, null, 2)
+//   audioplay.srcObject = stream;
   return navigator.mediaDevices.enumerateDevices();
 }
 
