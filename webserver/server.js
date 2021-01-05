@@ -52,7 +52,17 @@ io.sockets.on('connection', (socket) => {
 		// socket.emit('joined', room, socket.id) // 单人回复
 		// socket.to(room).emit('joined', room, socket.id) // 除自己外的
 		// io.in(room).emit('joined', room, socket.id) // 房间内所有人
-		socket.broadcast.emit('joined', room, socket.id) // 除自己，全部站点
+		// socket.broadcast.emit('joined', room, socket.id) // 除自己，全部站点
+		if(users < USERCOUNT){
+			socket.emit('joined', room, socket.id); //发给除自己之外的房间内的所有人
+			if(users > 1){
+				socket.to(room).emit('otherjoin', room, socket.id);
+			}
+		
+		}else{
+			socket.leave(room);	
+			socket.emit('full', room, socket.id);
+		}
 	}) 
 	socket.on('leave', (room) => {
 		var myRoom = io.sockets.adapter.rooms.get(room);
@@ -62,12 +72,13 @@ io.sockets.on('connection', (socket) => {
 		// socket.emit('joined', room, socket.id) 单人回复
 		// socket.to(room).emit('joined', room, socket.id) // 除自己外的
 		// io.in(room).emit('joined', room, socket.id) // 房间内所有人
-		socket.broadcast.emit('joined', room, socket.id) // 除自己，全部站点
+		socket.to(room).emit('bye', room, socket.id);
+		socket.emit('leaved', room, socket.id);
 	})
 
 	socket.on('message',(room, data)=>{
 		console.log("broadcast", room, data);
-        socket.broadcast.emit('message', room, data)
+        socket.to(room).emit('message', room, data)
     })
 })
 https_server.listen(444, '0.0.0.0')
